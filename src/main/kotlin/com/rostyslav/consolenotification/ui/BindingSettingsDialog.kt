@@ -23,6 +23,8 @@ class BindingSettingsDialog(private val project: Project, selectedText: @NlsSafe
 
     private val filePathField = JBTextField("press to select file...", 20)
 
+    private val fileSystemService = project.getService(FileSystemService::class.java)
+
     init {
         filePathField.isEditable = false
         title = "Bind Sound To Console Output Text"
@@ -38,8 +40,6 @@ class BindingSettingsDialog(private val project: Project, selectedText: @NlsSafe
                     val descriptor = FileChooserDescriptor(true, false, false, false, false, false)
                     FileChooser.chooseFile(descriptor, null, null) { virtualFile ->
                         filePathField.text = virtualFile.path
-                        project.getService(FileSystemService::class.java)
-                            .copyMediaToPluginsDir(Path.of(virtualFile.path))
                     }
                 }
             })
@@ -52,6 +52,7 @@ class BindingSettingsDialog(private val project: Project, selectedText: @NlsSafe
         if (text.isNotEmpty() && filePath.isNotEmpty()) {
             BindingStorageService.getInstance().addMapping(text, filePath)
             ConsoleSoundNotifierToolWindowFactory.updateBindings()
+            fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
         }
         super.doOKAction()
     }
