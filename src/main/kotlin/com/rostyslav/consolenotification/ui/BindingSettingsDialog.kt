@@ -6,15 +6,18 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.ui.components.JBTextField
-import com.rostyslav.consolenotification.service.SoundToTextBindingStorageService
+import com.rostyslav.consolenotification.service.BindingStorageService
+import com.rostyslav.consolenotification.service.FileSystemService
 import com.rostyslav.consolenotification.ui.UIService.Companion.addRows
 import java.awt.GridLayout
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.nio.file.Path
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class BindingSettingsDialog(project: Project, selectedText: @NlsSafe String) : DialogWrapper(true) {
+class BindingSettingsDialog(private val project: Project, selectedText: @NlsSafe String) :
+    DialogWrapper(true) {
 
     private val textField = JBTextField(selectedText, 20)
 
@@ -35,6 +38,8 @@ class BindingSettingsDialog(project: Project, selectedText: @NlsSafe String) : D
                     val descriptor = FileChooserDescriptor(true, false, false, false, false, false)
                     FileChooser.chooseFile(descriptor, null, null) { virtualFile ->
                         filePathField.text = virtualFile.path
+                        project.getService(FileSystemService::class.java)
+                            .copyMediaToPluginsDir(Path.of(virtualFile.path))
                     }
                 }
             })
@@ -45,7 +50,7 @@ class BindingSettingsDialog(project: Project, selectedText: @NlsSafe String) : D
         val text = textField.text.trim()
         val filePath = filePathField.text.trim()
         if (text.isNotEmpty() && filePath.isNotEmpty()) {
-            SoundToTextBindingStorageService.getInstance().addMapping(text, filePath)
+            BindingStorageService.getInstance().addMapping(text, filePath)
             ConsoleSoundNotifierToolWindowFactory.updateBindings()
         }
         super.doOKAction()

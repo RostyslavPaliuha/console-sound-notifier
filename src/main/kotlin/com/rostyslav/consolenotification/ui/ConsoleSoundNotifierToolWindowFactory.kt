@@ -7,9 +7,8 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBList
 import com.intellij.ui.content.ContentFactory
-import com.rostyslav.consolenotification.service.SoundToTextBindingStorageService
+import com.rostyslav.consolenotification.service.BindingStorageService
 import java.awt.BorderLayout
-import javax.swing.DefaultListModel
 import javax.swing.JPanel
 import javax.swing.JScrollPane
 import javax.swing.SwingUtilities
@@ -19,27 +18,28 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory, DumbAware {
     companion object {
         val panel = JPanel(BorderLayout())
 
-        var bindingsList = JBList<Any>();
+        var bindingsList = JBList<Any>()
 
-        val bindingsStorage = SoundToTextBindingStorageService.getInstance()
+        val bindingsStorage = BindingStorageService.getInstance()
 
         var bindings = bindingsStorage.getAllBindings()
 
         fun updateBindings() {
             bindings = bindingsStorage.getAllBindings()
             SwingUtilities.invokeLater {
-               try {
-                   panel.remove(1)
-               }catch (e :Exception ){
+                try {
+                    panel.remove(1)
+                } catch (e: Exception) {
 
-               }
+                }
                 createBindingsScrolableList()
             }
         }
 
         fun createBindingsScrolableList() {
             if (bindings.isNotEmpty()) {
-                bindingsList = JBList(bindings.map{ entry -> "${entry.component1()} : ${entry.component2()}" })
+                bindingsList =
+                    JBList(bindings.map { entry -> "${entry.component1()} : ${entry.component2()}" })
                 panel.add(
                     JScrollPane(bindingsList), BorderLayout.AFTER_LAST_LINE,
                 )

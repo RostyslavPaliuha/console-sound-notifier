@@ -1,12 +1,13 @@
 package com.rostyslav.consolenotification.service
 
 import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
-
+@Service(Service.Level.PROJECT)
 @State(name = "SoundMappings", storages = [Storage("sound_mappings.xml")])
-class SoundToTextBindingStorageService :
-    PersistentStateComponent<SoundToTextBindingStorageService.State> {
+class BindingStorageService :
+    PersistentStateComponent<BindingStorageService.State> {
 
     data class State(var mappings: MutableMap<String, String> = mutableMapOf())
 
@@ -31,12 +32,12 @@ class SoundToTextBindingStorageService :
     }
 
     companion object {
-        var serviceInstance: SoundToTextBindingStorageService = SoundToTextBindingStorageService()
-        fun getInstance(): SoundToTextBindingStorageService {
+        var serviceInstance: BindingStorageService = BindingStorageService()
+        fun getInstance(): BindingStorageService {
             return if (serviceInstance != null) serviceInstance
             else {
-                serviceInstance = SoundToTextBindingStorageService();
-                return serviceInstance;
+                serviceInstance = BindingStorageService()
+                return serviceInstance
             }
         }
     }

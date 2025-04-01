@@ -9,6 +9,6 @@ import com.rostyslav.consolenotification.service.SoundService
 class ConsoleTextFilterProvider : ConsoleFilterProvider {
 
     override fun getDefaultFilters(project: Project): Array<Filter> {
-        return arrayOf(ConsoleTextFilter(SoundService.getInstance()))
+        return arrayOf(project.getService(ConsoleTextFilter::class.java))
     }
 }

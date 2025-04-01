@@ -1,5 +1,6 @@
 package com.rostyslav.consolenotification.service
 
+import com.intellij.openapi.components.Service
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -12,6 +13,7 @@ import javax.sound.sampled.Clip
 import javax.sound.sampled.LineUnavailableException
 import javax.sound.sampled.UnsupportedAudioFileException
 
+@Service(Service.Level.PROJECT)
 class SoundService {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -50,14 +52,4 @@ class SoundService {
         }
     }
 
-    companion object {
-        var serviceInstance: SoundService = SoundService()
-        fun getInstance(): SoundService {
-            return if (serviceInstance != null) serviceInstance
-            else {
-                serviceInstance = SoundService();
-                return serviceInstance;
-            }
-        }
-    }
 }

@@ -52,13 +52,13 @@
 
     <actions>
         <action id="com.example.plugin.NotifyOnSelectedText"
-                class="com.rostyslav.consolenotification.action.NotifyOnSelectedTextAction"
+                class="com.rostyslav.consolenotification.action.OpenBindingPanelAction"
                 text="Notify on Selected Text">
             <add-to-group group-id="ConsoleView.PopupMenu" anchor="last"/>
         </action>
 
         <action id="ConsoleSoundNotifierAction"
-                class="com.rostyslav.consolenotification.action.ConsoleSoundNotifierAction"
+                class="com.rostyslav.consolenotification.action.OpenToolWindowAction"
                 text="Console Sound Notifier"
                 description="Open the Console Sound Notifier Tool Window"
                 icon="/META-INF/pluginIcon.svg">

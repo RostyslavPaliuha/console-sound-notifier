@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.rostyslav.consolenotification.ui.BindingSettingsDialog
 import javax.swing.SwingUtilities
 
-class NotifyOnSelectedTextAction : AnAction("Notify on Selected Text") {
+class OpenBindingPanelAction : AnAction("Bind sound to selected text") {
 
     override fun actionPerformed(e: AnActionEvent) {
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return

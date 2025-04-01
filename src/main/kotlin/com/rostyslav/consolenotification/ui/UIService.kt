@@ -5,7 +5,7 @@ import com.intellij.ui.components.JBTextField
 import javax.swing.JPanel
 
 class UIService {
-    companion object{
+    companion object {
         fun addRows(text: JBTextField, pathToMedia: JBTextField, panel: JPanel) {
             panel.add(JBLabel("Text:"))
             panel.add(text)
