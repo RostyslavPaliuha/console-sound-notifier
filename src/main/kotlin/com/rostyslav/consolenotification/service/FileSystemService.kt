@@ -8,6 +8,12 @@ import java.nio.file.Path
 @Service(Service.Level.PROJECT)
 class FileSystemService {
 
+    companion object {
+        fun getMediaDirectoryPath(): Path = PathManager.getPluginsDir()
+            .resolve("console-sound-notifier")
+            .resolve("media")
+    }
+
     fun copyMediaToPluginsDir(selectedFile: Path) {
         val mediaDirectory = getMediaDirectoryPath()
         makeMediaDirectory(mediaDirectory)
@@ -25,7 +31,8 @@ class FileSystemService {
         if (!Files.exists(mediaDirectory)) Files.createDirectory(mediaDirectory)
     }
 
-    private fun getMediaDirectoryPath(): Path = PathManager.getPluginsDir()
-        .resolve("console-sound-notifier")
-        .resolve("media")
+    public fun createDirectory(directoryPath:Path){
+        Files.createDirectory(directoryPath)
+    }
+
 }

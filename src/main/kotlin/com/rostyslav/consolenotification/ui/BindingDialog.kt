@@ -5,6 +5,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.NlsSafe
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.ui.components.JBTextField
 import com.rostyslav.consolenotification.service.BindingStorageService
 import com.rostyslav.consolenotification.service.FileSystemService
@@ -15,6 +16,7 @@ import java.awt.event.MouseEvent
 import java.nio.file.Path
 import javax.swing.JComponent
 import javax.swing.JPanel
+import kotlin.io.path.pathString
 
 class BindingDialog(private val project: Project, selectedText: @NlsSafe String) :
     DialogWrapper(true) {
@@ -38,7 +40,9 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
             object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent?) {
                     val descriptor = FileChooserDescriptor(true, false, false, false, false, false)
-                    FileChooser.chooseFile(descriptor, null, null) { virtualFile ->
+                    val initialPath = LocalFileSystem.getInstance()
+                        .refreshAndFindFileByPath(FileSystemService.getMediaDirectoryPath().pathString)
+                    FileChooser.chooseFile(descriptor, null, initialPath) { virtualFile ->
                         filePathField.text = virtualFile.path
                     }
                 }
@@ -52,7 +56,9 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
         if (text.isNotEmpty() && filePath.isNotEmpty()) {
             BindingStorageService.getInstance().addMapping(text, filePath)
             ConsoleSoundNotifierToolWindowFactory.updateBindings()
-            fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
+            if (!FileSystemService.getMediaDirectoryPath().startsWith(Path.of(filePath))) {
+                fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
+            }
         }
         super.doOKAction()
     }
