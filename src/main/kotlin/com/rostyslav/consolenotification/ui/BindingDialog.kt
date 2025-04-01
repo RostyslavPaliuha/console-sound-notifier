@@ -16,7 +16,7 @@ import java.nio.file.Path
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class BindingSettingsDialog(private val project: Project, selectedText: @NlsSafe String) :
+class BindingDialog(private val project: Project, selectedText: @NlsSafe String) :
     DialogWrapper(true) {
 
     private val textField = JBTextField(selectedText, 20)

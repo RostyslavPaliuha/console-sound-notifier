@@ -8,8 +8,7 @@ class OpenToolWindowAction : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val toolWindow =
-            ToolWindowManager.getInstance(project).getToolWindow("Console Sound Notifier")
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Console Sound Notifier")
         toolWindow?.show(null)
     }
 }

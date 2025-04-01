@@ -51,13 +51,13 @@
     </extensions>
 
     <actions>
-        <action id="com.example.plugin.NotifyOnSelectedText"
+        <action id="OpenBindingPanelAction"
                 class="com.rostyslav.consolenotification.action.OpenBindingPanelAction"
                 text="Notify on Selected Text">
             <add-to-group group-id="ConsoleView.PopupMenu" anchor="last"/>
         </action>
 
-        <action id="ConsoleSoundNotifierAction"
+        <action id="OpenToolWindowAction"
                 class="com.rostyslav.consolenotification.action.OpenToolWindowAction"
                 text="Console Sound Notifier"
                 description="Open the Console Sound Notifier Tool Window"
