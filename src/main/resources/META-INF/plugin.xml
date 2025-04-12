@@ -43,8 +43,7 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <consoleFilterProvider
-                implementation="com.rostyslav.consolenotification.filter.consoletext.provider.ConsoleTextFilterProvider"/>
+        <consoleFilterProvider implementation="com.rostyslav.consolenotification.filter.consoletext.provider.ConsoleTextFilterProvider"/>
         <toolWindow id="Console Sound Notifier"
                     factoryClass="com.rostyslav.consolenotification.ui.ConsoleSoundNotifierToolWindowFactory"
                     secondary="false"/>
@@ -61,10 +60,13 @@
                 class="com.rostyslav.consolenotification.action.OpenToolWindowAction"
                 text="Console Sound Notifier"
                 description="Open the Console Sound Notifier Tool Window"
-                icon="/META-INF/pluginIcon.svg">
+                icon="/icon/speaker.svg">
             <add-to-group group-id="ToolWindowsGroup" anchor="last"/>
         </action>
 
     </actions>
+    <applicationListeners>
+        <listener class="com.rostyslav.consolenotification.configuration.PluginSettingsInitializer" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
 
 </idea-plugin>

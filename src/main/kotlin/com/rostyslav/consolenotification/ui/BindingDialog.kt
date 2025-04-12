@@ -7,16 +7,19 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.ui.components.JBTextField
+import com.rostyslav.consolenotification.messages.RefreshBindingsTopicInitializer
 import com.rostyslav.consolenotification.service.BindingStorageService
 import com.rostyslav.consolenotification.service.FileSystemService
 import com.rostyslav.consolenotification.ui.UIService.Companion.addRows
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.awt.GridLayout
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.nio.file.Path
 import javax.swing.JComponent
 import javax.swing.JPanel
-import kotlin.io.path.pathString
 
 class BindingDialog(private val project: Project, selectedText: @NlsSafe String) :
     DialogWrapper(true) {
@@ -26,6 +29,8 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
     private val filePathField = JBTextField("press to select file...", 20)
 
     private val fileSystemService = project.getService(FileSystemService::class.java)
+
+    private val bindingStorageService = BindingStorageService.getInstance()
 
     init {
         filePathField.isEditable = false
@@ -41,7 +46,7 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
                 override fun mouseClicked(e: MouseEvent?) {
                     val descriptor = FileChooserDescriptor(true, false, false, false, false, false)
                     val initialPath = LocalFileSystem.getInstance()
-                        .refreshAndFindFileByPath(FileSystemService.getMediaDirectoryPath().pathString)
+                        .refreshAndFindFileByNioFile(FileSystemService.getMediaDirectoryPath())
                     FileChooser.chooseFile(descriptor, null, initialPath) { virtualFile ->
                         filePathField.text = virtualFile.path
                     }
@@ -54,11 +59,16 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
         val text = textField.text.trim()
         val filePath = filePathField.text.trim()
         if (text.isNotEmpty() && filePath.isNotEmpty()) {
-            BindingStorageService.getInstance().addMapping(text, filePath)
-            ConsoleSoundNotifierToolWindowFactory.updateBindings()
-            if (!FileSystemService.getMediaDirectoryPath().startsWith(Path.of(filePath))) {
-                fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
+            CoroutineScope(Dispatchers.IO).launch {
+                bindingStorageService.addMapping(text, filePath)
+                project.messageBus
+                    .syncPublisher(RefreshBindingsTopicInitializer.TOPIC)
+                    .onRefreshOnChange(BindingDialog::class.toString())
+                if (!FileSystemService.getMediaDirectoryPath().startsWith(Path.of(filePath))) {
+                    fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
+                }
             }
+
         }
         super.doOKAction()
     }

@@ -1,13 +1,12 @@
 package com.rostyslav.consolenotification.service
 
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.*
+import com.intellij.openapi.project.Project
+import com.rostyslav.consolenotification.configuration.SettingsStorage
+
 @Service(Service.Level.PROJECT)
 @State(name = "SoundMappings", storages = [Storage("sound_mappings.xml")])
-class BindingStorageService :
-    PersistentStateComponent<BindingStorageService.State> {
+class BindingStorageService : PersistentStateComponent<BindingStorageService.State> {
 
     data class State(var mappings: MutableMap<String, String> = mutableMapOf())
 
@@ -31,15 +30,8 @@ class BindingStorageService :
         return state.mappings
     }
 
-    companion object {
-        var serviceInstance: BindingStorageService = BindingStorageService()
-        fun getInstance(): BindingStorageService {
-            return if (serviceInstance != null) serviceInstance
-            else {
-                serviceInstance = BindingStorageService()
-                return serviceInstance
-            }
-        }
-    }
 
+    companion object {
+        fun getInstance(): BindingStorageService = service()
+    }
 }

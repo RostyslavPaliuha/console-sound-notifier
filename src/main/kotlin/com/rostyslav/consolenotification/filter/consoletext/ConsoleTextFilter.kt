@@ -8,15 +8,15 @@ import com.rostyslav.consolenotification.service.SoundService
 import org.jetbrains.annotations.NotNull
 
 @Service(Service.Level.PROJECT)
-class ConsoleTextFilter(private var project: Project) : Filter {
+class ConsoleTextFilter(private val project: Project) : Filter {
 
     private var soundService: SoundService
 
     private var bindingsStorageService: BindingStorageService;
 
     init {
-        this.soundService = project.getService(SoundService::class.java)
-        this.bindingsStorageService = project.getService(BindingStorageService::class.java)
+        this.soundService = SoundService.getInstance()
+        this.bindingsStorageService = BindingStorageService.getInstance()
     }
 
     override fun applyFilter(@NotNull line: String, entireLength: Int): Filter.Result? {

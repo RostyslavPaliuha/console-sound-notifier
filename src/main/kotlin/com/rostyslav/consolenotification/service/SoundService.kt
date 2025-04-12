@@ -1,6 +1,8 @@
 package com.rostyslav.consolenotification.service
 
 import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
+import com.rostyslav.consolenotification.configuration.SettingsStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -52,4 +54,7 @@ class SoundService {
         }
     }
 
+    companion object {
+        fun getInstance(): SoundService = service()
+    }
 }
