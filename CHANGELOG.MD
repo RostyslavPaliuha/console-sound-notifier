@@ -12,7 +12,7 @@
 <h5>0.0.2 - 2025-04-01</h5>
 <ul>
     <li>Added plugin`s file system first-time initialization.</li>
-    <li>added icon for list item in find actions panel.<li>
+    <li>added icon for list item in find actions panel.</li>
 </ul>
 </div>
 
