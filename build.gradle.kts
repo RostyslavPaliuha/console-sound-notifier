@@ -1,7 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
   id("java")
-  id("org.jetbrains.kotlin.jvm") version "1.9.25"
-  id("org.jetbrains.intellij") version "1.17.4"
+  id("org.jetbrains.kotlin.jvm") version "2.3.20"
+  id("org.jetbrains.intellij.platform") version "2.16.0"
 }
 
 group = "com.rostyslav"
@@ -9,37 +11,56 @@ version = "0.0.3"
 
 repositories {
   mavenCentral()
+  intellijPlatform {
+    defaultRepositories()
+  }
 }
 
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-  version.set("2024.1.7")
-  type.set("IC")
-  plugins.set(listOf(/* Plugin Dependencies */))
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(25))
+  }
+}
+
+kotlin {
+  jvmToolchain(25)
+}
+
+dependencies {
+  intellijPlatform {
+    intellijIdea("2026.1")
+  }
+}
+
+intellijPlatform {
+  pluginConfiguration {
+    ideaVersion {
+      sinceBuild = "261"
+      untilBuild = "261.*"
+    }
+  }
+
+  signing {
+    certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
+    privateKey = providers.environmentVariable("PRIVATE_KEY")
+    password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+  }
+
+  publishing {
+    token = providers.environmentVariable("PUBLISH_TOKEN")
+  }
 }
 
 tasks {
-  // Set the JVM compatibility versions
+  // IntelliJ 2026.1 runs on JBR 21, so keep emitted plugin bytecode compatible.
   withType<JavaCompile> {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
+    sourceCompatibility = "21"
+    targetCompatibility = "21"
+    options.release.set(21)
   }
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
-  }
-
-  patchPluginXml {
-    sinceBuild.set("241")
-    untilBuild.set("243.*")
-  }
-
-  signPlugin {
-    certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-    privateKey.set(System.getenv("PRIVATE_KEY"))
-    password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-  }
-
-  publishPlugin {
-    token.set(System.getenv("PUBLISH_TOKEN"))
+    compilerOptions {
+      jvmTarget = JvmTarget.JVM_21
+    }
   }
 }

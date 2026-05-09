@@ -1,13 +1,9 @@
 package com.rostyslav.consolenotification.service
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
-import com.rostyslav.consolenotification.configuration.SettingsStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import javax.sound.sampled.AudioSystem
@@ -16,45 +12,53 @@ import javax.sound.sampled.LineUnavailableException
 import javax.sound.sampled.UnsupportedAudioFileException
 
 @Service(Service.Level.PROJECT)
-class SoundService {
+class SoundService : Disposable {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val playableMediaQueue: Channel<String> = Channel(Channel.UNLIMITED)
-
-    fun addTask(soundFilePath: String) {
-        playableMediaQueue.trySend(soundFilePath)
-    }
 
     init {
         startPlaying()
     }
 
-    fun startPlaying() {
+    fun addTask(soundFilePath: String) {
+        playableMediaQueue.trySend(soundFilePath)
+    }
+
+    private fun startPlaying() {
         coroutineScope.launch {
-            for (mediaFilePath in playableMediaQueue)
-                playSound(mediaFilePath)
+            for (mediaFilePath in playableMediaQueue) {
+                    playSound(mediaFilePath)
+            }
         }
     }
 
-    suspend fun playSound(pathToMedia: String) {
+    private suspend fun playSound(pathToMedia: String) {
+        var clip: Clip? = null
         try {
-            val audioInputStream = AudioSystem.getAudioInputStream(File(pathToMedia))
-            val clip: Clip = AudioSystem.getClip()
-            clip.open(audioInputStream)
-            clip.start()
-            delay(5)
-            clip.drain()
+            AudioSystem.getAudioInputStream(File(pathToMedia)).use { audioInputStream ->
+                val openedClip = AudioSystem.getClip()
+                clip = openedClip
+                openedClip.open(audioInputStream)
+                openedClip.start()
+                delay(5)
+                openedClip.drain()
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: UnsupportedAudioFileException) {
             e.printStackTrace()
         } catch (e: LineUnavailableException) {
             e.printStackTrace()
+        } finally {
+            clip?.close()
         }
     }
 
-    companion object {
-        fun getInstance(): SoundService = service()
+    override fun dispose() {
+        playableMediaQueue.close()
+        coroutineScope.cancel()
     }
+
 }

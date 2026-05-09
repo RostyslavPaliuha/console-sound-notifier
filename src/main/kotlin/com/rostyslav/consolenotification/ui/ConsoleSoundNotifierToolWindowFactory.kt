@@ -1,5 +1,6 @@
 package com.rostyslav.consolenotification.ui
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -15,7 +16,7 @@ import javax.swing.*
 
 class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
     DumbAware {
-    var bindingsStorage: BindingStorageService
+    lateinit var bindingsStorage: BindingStorageService
 
     var panel = JPanel(BorderLayout()).apply {
         border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
@@ -24,18 +25,16 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
 
     var bindingsList = JBList<String>()
 
-    var bindings: MutableMap<String, String>
+    var bindings: Map<String, String> = emptyMap()
 
     lateinit var project: Project;
-    init {
-        bindingsStorage = BindingStorageService.getInstance()
-        bindings = bindingsStorage.getAllBindings()
-    }
 
     override fun shouldBeAvailable(project: Project): Boolean = true
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         this.project = project
+        bindingsStorage = project.service()
+        bindings = bindingsStorage.getAllBindings()
         subscribeOnRefreshBindingsTopic(project)
         panel.add(JBLabel("Bindings list"), BorderLayout.PAGE_START)
         createBindingsScrolableList()
@@ -143,4 +142,3 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
         updateBindings()
     }
 }
-

@@ -4,7 +4,6 @@ import com.intellij.execution.filters.ConsoleFilterProvider
 import com.intellij.execution.filters.Filter
 import com.intellij.openapi.project.Project
 import com.rostyslav.consolenotification.filter.consoletext.ConsoleTextFilter
-import com.rostyslav.consolenotification.service.SoundService
 
 class ConsoleTextFilterProvider : ConsoleFilterProvider {
 

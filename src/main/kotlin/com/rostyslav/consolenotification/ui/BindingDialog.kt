@@ -1,5 +1,6 @@
 package com.rostyslav.consolenotification.ui
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.project.Project
@@ -30,7 +31,7 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
 
     private val fileSystemService = project.getService(FileSystemService::class.java)
 
-    private val bindingStorageService = BindingStorageService.getInstance()
+    private val bindingStorageService: BindingStorageService = project.service()
 
     init {
         filePathField.isEditable = false
