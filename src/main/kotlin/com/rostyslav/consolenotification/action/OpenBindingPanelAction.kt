@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.ApplicationManager
 import com.rostyslav.consolenotification.ui.BindingDialog
-import javax.swing.SwingUtilities
 
 class OpenBindingPanelAction : AnAction("Bind sound to selected text") {
 
