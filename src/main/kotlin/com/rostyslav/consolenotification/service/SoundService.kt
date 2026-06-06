@@ -2,6 +2,7 @@ package com.rostyslav.consolenotification.service
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
+import com.intellij.openapi.diagnostic.Logger
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.io.File
@@ -15,6 +16,8 @@ import javax.sound.sampled.UnsupportedAudioFileException
 
 @Service(Service.Level.PROJECT)
 class SoundService : Disposable {
+
+    private val log = Logger.getInstance(SoundService::class.java)
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -36,7 +39,7 @@ class SoundService : Disposable {
         }
     }
 
-    private suspend fun playSound(pathToMedia: String) {
+    private fun playSound(pathToMedia: String) {
         var clip: Clip? = null
         try {
             AudioSystem.getAudioInputStream(File(pathToMedia)).use { audioInputStream ->
@@ -52,12 +55,8 @@ class SoundService : Disposable {
                 countDownLatch.await()
                 clip.drain()
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: UnsupportedAudioFileException) {
-            e.printStackTrace()
-        } catch (e: LineUnavailableException) {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            log.error(e)
         } finally {
             clip?.close()
         }
