@@ -30,6 +30,7 @@ dependencies {
   intellijPlatform {
     intellijIdea("2026.1")
   }
+    testImplementation(kotlin("test"))
 }
 
 intellijPlatform {
