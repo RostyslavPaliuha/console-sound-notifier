@@ -46,6 +46,7 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
             object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent?) {
                     val descriptor = FileChooserDescriptor(true, false, false, false, false, false)
+                    fileSystemService.installDefaultSounds()
                     val initialPath = LocalFileSystem.getInstance()
                         .refreshAndFindFileByNioFile(FileSystemService.getMediaDirectoryPath())
                     FileChooser.chooseFile(descriptor, null, initialPath) { virtualFile ->
@@ -65,7 +66,7 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
                 project.messageBus
                     .syncPublisher(RefreshBindingsTopicInitializer.TOPIC)
                     .onRefreshOnChange(BindingDialog::class.toString())
-                if (!FileSystemService.getMediaDirectoryPath().startsWith(Path.of(filePath))) {
+                if (!FileSystemService.isInMediaDirectory(Path.of(filePath))) {
                     fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
                 }
             }
