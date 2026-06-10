@@ -75,7 +75,6 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
                     fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
                 }
             }
-
         }
         super.doOKAction()
     }
