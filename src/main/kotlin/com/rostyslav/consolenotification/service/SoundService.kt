@@ -6,13 +6,10 @@ import com.intellij.openapi.diagnostic.Logger
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.LineEvent.Type.STOP
-import javax.sound.sampled.LineUnavailableException
-import javax.sound.sampled.UnsupportedAudioFileException
 
 @Service(Service.Level.PROJECT)
 class SoundService : Disposable {

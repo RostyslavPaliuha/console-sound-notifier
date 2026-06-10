@@ -7,11 +7,13 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBLabel
-import com.intellij.ui.components.JBList
 import com.intellij.ui.content.ContentFactory
 import com.rostyslav.consolenotification.messages.RefreshBindingsTopicInitializer
 import com.rostyslav.consolenotification.service.BindingStorageService
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.Dimension
+import java.awt.Font
 import javax.swing.*
 
 class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
@@ -23,11 +25,9 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
         background = JBColor.PanelBackground
     }
 
-    var bindingsList = JBList<String>()
-
     var bindings: Map<String, String> = emptyMap()
 
-    lateinit var project: Project;
+    lateinit var project: Project
 
     override fun shouldBeAvailable(project: Project): Boolean = true
 
@@ -64,6 +64,7 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
             createBindingsScrolableList()
         }
     }
+
     fun createBindingsScrolableList() {
         val listPanel = JPanel()
         listPanel.layout = BoxLayout(listPanel, BoxLayout.Y_AXIS)
@@ -76,7 +77,7 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
             rowPanel.border = BorderFactory.createEmptyBorder(5, 10, 5, 10)
             rowPanel.alignmentX = Component.LEFT_ALIGNMENT
             rowPanel.background = JBColor.PanelBackground
-            val label = JLabel("$key -> " +  value.split("/").last())
+            val label = JLabel("$key -> " + value.split("/").last())
             label.font = Font("JetBrains Mono", Font.PLAIN, 12)
             label.maximumSize = Dimension(Int.MAX_VALUE, label.preferredSize.height)
             rowPanel.add(label)
@@ -87,9 +88,11 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
                 font = Font("JetBrains Mono", Font.PLAIN, 11)
                 preferredSize = Dimension(80, 24)
                 maximumSize = preferredSize
-                addActionListener {  SwingUtilities.invokeLater {
-                    BindingDialog(project, key).show()
-                } }
+                addActionListener {
+                    SwingUtilities.invokeLater {
+                        BindingDialog(project, key).show()
+                    }
+                }
             }
 
             val deleteButton = JButton("Delete").apply {
@@ -111,10 +114,7 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
             listPanel.add(rowPanel)
             listPanel.add(Box.createVerticalStrut(5))
         }
-
-        // 🔝 Push all rows to the top
         listPanel.add(Box.createVerticalGlue())
-
         val scrollPane = JScrollPane(listPanel).apply {
             border = BorderFactory.createEmptyBorder()
             verticalScrollBar.unitIncrement = 12
@@ -129,7 +129,7 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
         panel.repaint()
     }
 
-        fun updateBinding(key: String, oldValue: String) {
+    fun updateBinding(key: String, oldValue: String) {
         val newValue = JOptionPane.showInputDialog(panel, "Enter new value for $key:", oldValue)
         if (newValue != null) {
             bindingsStorage.updateBinding(key, newValue)
