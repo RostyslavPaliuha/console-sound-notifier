@@ -1,29 +1,37 @@
 <idea-plugin>
     <id>com.rostyslavpaliuha.consolesoundnotificatier</id>
     <name>Console Sound Notifier</name>
-    <vendor email="rostyslavpaliuha@gmail.com" url="https://www.linkedin.com/in/rostyslavpaliuha/">Rostyslav Paliuha</vendor>
-    <description><![CDATA[<h1>🔊🔊🔊Console Sound Notifier 🔊🔊🔊</h1>
+    <vendor email="rostyslavpaliuha@gmail.com" url="https://www.linkedin.com/in/rostyslavpaliuha/">
+        Rostyslav Paliuha
+    </vendor>
+    <description><![CDATA[
+                 Console Sound Notifier helps developers monitor IntelliJ IDEA console output and receive audible alerts when specific keywords appear.
 
-    <h2>ℹ️ Overview</h2>
-    <p>
-        The <b>IntelliJ Console Sound Notifier</b> enhances your development workflow by
-        monitoring the console output and playing a sound when a specific keyword appears.
-        Ideal for developers who want to be instantly notified of important log events.
-        Has 4 default sounds from the box.
-    </p>
+                 <h2>Overview</h2>
+                 <p>
+                     <b>Console Sound Notifier</b> enhances your development workflow by monitoring console output
+                     and playing a sound when a configured keyword appears.
+                 </p>
 
-    <h2>🎵 Use Cases</h2>
-    <ul>
-        <li>🔹 Get notified when a <b>build finishes</b> or an <b>error occurs</b>.</li>
-        <li>🔹 Detect specific <b>log messages</b> without constant manual monitoring.</li>
-        <li>🔹 Improve productivity by receiving <b>audible alerts</b> for important events.</li>
-    </ul>
-]]></description>
+                 <p>
+                     It is useful when you want to be instantly notified about important log events without constantly
+                     watching the console manually. The plugin includes four built-in sounds out of the box.
+                 </p>
+
+                 <h2>Use Cases</h2>
+                 <ul>
+                     <li>Get notified when a build finishes or an error occurs.</li>
+                     <li>Detect specific log messages without constant manual monitoring.</li>
+                     <li>Improve productivity by receiving audible alerts for important events.</li>
+                 </ul>
+                 ]]>
+    </description>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <consoleFilterProvider implementation="com.rostyslav.consolenotification.filter.consoletext.provider.ConsoleTextFilterProvider"/>
+        <consoleFilterProvider
+                implementation="com.rostyslav.consolenotification.filter.consoletext.provider.ConsoleTextFilterProvider"/>
         <toolWindow id="Console Sound Notifier"
                     factoryClass="com.rostyslav.consolenotification.ui.ConsoleSoundNotifierToolWindowFactory"
                     secondary="false"/>
@@ -46,7 +54,8 @@
 
     </actions>
     <applicationListeners>
-        <listener class="com.rostyslav.consolenotification.configuration.PluginSettingsInitializer" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+        <listener class="com.rostyslav.consolenotification.configuration.PluginSettingsInitializer"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
 </idea-plugin>
