@@ -34,6 +34,7 @@
                 implementation="com.rostyslav.consolenotification.filter.consoletext.provider.ConsoleTextFilterProvider"/>
         <toolWindow id="Console Sound Notifier"
                     factoryClass="com.rostyslav.consolenotification.ui.ConsoleSoundNotifierToolWindowFactory"
+                    icon="/icon/speakerToolWindow.svg"
                     secondary="false"/>
     </extensions>
 
