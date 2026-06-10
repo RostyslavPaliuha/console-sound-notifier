@@ -46,10 +46,15 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
             object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent?) {
                     val descriptor = FileChooserDescriptor(true, false, false, false, false, false)
+                        .withFileFilter { virtualFile ->
+                            isSupportedSoundFileExtension(virtualFile.extension)
+                        }
+                        .withTitle("Choose WAV Sound File")
+                        .withDescription("Only .wav files are supported")
                     fileSystemService.installDefaultSounds()
                     val initialPath = LocalFileSystem.getInstance()
                         .refreshAndFindFileByNioFile(FileSystemService.getMediaDirectoryPath())
-                    FileChooser.chooseFile(descriptor, null, initialPath) { virtualFile ->
+                    FileChooser.chooseFile(descriptor, project, initialPath) { virtualFile ->
                         filePathField.text = virtualFile.path
                     }
                 }
@@ -76,3 +81,6 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
     }
 
 }
+
+internal fun isSupportedSoundFileExtension(extension: String?): Boolean =
+    extension?.equals("wav", ignoreCase = true) == true
