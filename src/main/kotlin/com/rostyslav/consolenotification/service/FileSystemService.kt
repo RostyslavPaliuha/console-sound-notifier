@@ -65,8 +65,4 @@ class FileSystemService {
         }
     }
 
-    fun createDirectory(directoryPath: Path) {
-        Files.createDirectories(directoryPath)
-    }
-
 }
