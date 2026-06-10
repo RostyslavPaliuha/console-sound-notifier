@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.rostyslav"
-version = "0.0.4"
+version = "0.0.4.1"
 
 repositories {
     mavenCentral()
