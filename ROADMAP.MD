@@ -9,7 +9,7 @@
     - Enhance user experience
     - Notification window
 
-### 🚀 v.0.0.6 (q2 2026)
+### 🚀 v.0.0.6 (Q2 2026)
 
 - [ ] **Performance Boost**
     - Optimize plugin startup time
