@@ -1,4 +1,21 @@
 <h1>Change Log</h1>
+<div style="background:lightgray ">
+
+<h5>0.0.4.1-0.0.4.2 - 2025-04-12</h5>
+<ul>
+    <li>fixes: icon rendering in new ui, supported media type restriction</li>
+    <li>refactorings, clean-ups</li>
+</ul>
+</div>
+
+<div style="background:lightgray ">
+<h5>0.0.4 - 2026-04-12</h5>
+<ul>
+    <li>multi version support</li>
+    <li>🥳publish on intellij marketplace</li>
+    <li>fixes</li>
+</ul>
+</div>
 
 <div style="background:lightgray ">
 <h5>0.0.3 - 2025-04-12</h5>
