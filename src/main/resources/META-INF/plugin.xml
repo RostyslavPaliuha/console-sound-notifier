@@ -36,6 +36,8 @@
                     factoryClass="com.rostyslav.consolenotification.ui.ConsoleSoundNotifierToolWindowFactory"
                     icon="/icon/speakerToolWindow.svg"
                     secondary="false"/>
+        <notificationGroup id="Console Sound Notifier"
+                           displayType="BALLOON"/>
     </extensions>
 
     <actions>

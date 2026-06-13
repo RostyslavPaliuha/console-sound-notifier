@@ -1,5 +1,6 @@
 package com.rostyslav.consolenotification.ui
 
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
@@ -36,7 +37,7 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
         bindingsStorage = project.service()
         bindings = bindingsStorage.getAllBindings()
         subscribeOnRefreshBindingsTopic(project)
-        panel.add(JBLabel("Bindings list"), BorderLayout.PAGE_START)
+        panel.add(createHeaderPanel(), BorderLayout.PAGE_START)
         createBindingsScrolableList()
         val contentFactory = ContentFactory.getInstance()
         val content = contentFactory.createContent(panel, "", false)
@@ -51,6 +52,29 @@ class ConsoleSoundNotifierToolWindowFactory : ToolWindowFactory,
                     updateBindings()
                 }
             })
+    }
+
+    private fun createHeaderPanel(): JPanel {
+        val headerPanel = JPanel(BorderLayout()).apply {
+            background = JBColor.PanelBackground
+            border = BorderFactory.createEmptyBorder(0, 0, 8, 0)
+        }
+
+        val addButton = JButton(AllIcons.General.Add).apply {
+            toolTipText = "Add binding"
+            preferredSize = Dimension(28, 24)
+            maximumSize = preferredSize
+            addActionListener {
+                SwingUtilities.invokeLater {
+                    BindingDialog(project, "").show()
+                }
+            }
+        }
+
+        headerPanel.add(JBLabel("Bindings list"), BorderLayout.WEST)
+        headerPanel.add(addButton, BorderLayout.EAST)
+
+        return headerPanel
     }
 
     fun updateBindings() {

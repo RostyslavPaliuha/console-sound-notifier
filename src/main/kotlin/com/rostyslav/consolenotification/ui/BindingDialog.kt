@@ -27,7 +27,7 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
 
     private val textField = JBTextField(selectedText, 20)
 
-    private val filePathField = JBTextField("press to select file...", 20)
+    private val filePathField = JBTextField(FILE_PATH_PLACEHOLDER, 20)
 
     private val fileSystemService = project.getService(FileSystemService::class.java)
 
@@ -65,15 +65,19 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
     override fun doOKAction() {
         val text = textField.text.trim()
         val filePath = filePathField.text.trim()
-        if (text.isNotEmpty() && filePath.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                bindingStorageService.addMapping(text, filePath)
-                project.messageBus
-                    .syncPublisher(RefreshBindingsTopicInitializer.TOPIC)
-                    .onRefreshOnChange(BindingDialog::class.toString())
-                if (!FileSystemService.isInMediaDirectory(Path.of(filePath))) {
-                    fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
-                }
+
+        if (!isValidBindingInput(text, filePath)) {
+            setErrorText("Enter binding text and choose a WAV file.")
+            return
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            bindingStorageService.addMapping(text, filePath)
+            project.messageBus
+                .syncPublisher(RefreshBindingsTopicInitializer.TOPIC)
+                .onRefreshOnChange(BindingDialog::class.toString())
+            if (!FileSystemService.isInMediaDirectory(Path.of(filePath))) {
+                fileSystemService.copyMediaToPluginsDir(Path.of(filePath))
             }
         }
         super.doOKAction()
@@ -81,5 +85,18 @@ class BindingDialog(private val project: Project, selectedText: @NlsSafe String)
 
 }
 
+internal const val FILE_PATH_PLACEHOLDER = "press to select file..."
+
 internal fun isSupportedSoundFileExtension(extension: String?): Boolean =
     extension?.equals("wav", ignoreCase = true) == true
+
+internal fun isValidBindingInput(text: String, filePath: String): Boolean {
+    val trimmedText = text.trim()
+    val trimmedFilePath = filePath.trim()
+    val extension = trimmedFilePath.substringAfterLast('.', missingDelimiterValue = "")
+
+    return trimmedText.isNotEmpty() &&
+        trimmedFilePath.isNotEmpty() &&
+        trimmedFilePath != FILE_PATH_PLACEHOLDER &&
+        isSupportedSoundFileExtension(extension)
+}

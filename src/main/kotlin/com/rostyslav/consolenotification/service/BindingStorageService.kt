@@ -50,6 +50,14 @@ class BindingStorageService : PersistentStateComponent<BindingStorageService.Sta
         return bindingsSnapshot.isNotEmpty()
     }
 
+    fun hasBinding(binding: String): Boolean {
+        return state.mappings.containsKey(binding)
+    }
+
+    fun getBinding(textLine: String): String? {
+        return bindingsSnapshot.firstOrNull { binding -> textLine.contains(binding.text) }?.text
+    }
+
     private fun rebuildSnapshot() {
         bindingsSnapshot = state.mappings
             .filterKeys { it.isNotBlank() }
