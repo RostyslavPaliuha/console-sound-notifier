@@ -2,15 +2,11 @@
 
 ## 🚀 Upcoming Releases
 
-### 🎨 v0.0.5 (Q2 2026)
-
-- [ ] **UI Improvements**
-    - Modernize interface components
-    - Enhance user experience
-    - Notification window
-
 ### 🚀 v.0.0.6 (Q2 2026)
-
+- [ ] **Repository stabilization**
+- [ ] **Small functionality enhances**
+    - Add selection context menu item in regular terminal
+    - Modify visual components
 - [ ] **Performance Boost**
     - Optimize plugin startup time
     - Reduce memory footprint
