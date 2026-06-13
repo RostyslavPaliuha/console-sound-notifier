@@ -1,7 +1,14 @@
 <h1>Change Log</h1>
 <div style="background:lightgray ">
+<h5>0.0.5 - 2026-06-13</h5>
+<ul>
+    <li>added notification popup, play sounds only for first occurrences in a session.</li>
+    <li>added + button to add binding without selection text in console</li>
+</ul>
+</div>
 
-<h5>0.0.4.1-0.0.4.2 - 2025-04-12</h5>
+<div style="background:lightgray ">
+<h5>0.0.4.1-0.0.4.2 - 2026-06-10</h5>
 <ul>
     <li>fixes: icon rendering in new ui, supported media type restriction</li>
     <li>refactorings, clean-ups</li>
