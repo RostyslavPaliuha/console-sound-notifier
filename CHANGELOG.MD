@@ -1,5 +1,14 @@
 <h1>Change Log</h1>
 <div style="background:lightgray ">
+
+
+<h5>0.0.5.1 - 2026-06-14</h5>
+<ul>
+    <li>Added market logo.</li>
+</ul>
+</div>
+
+<div style="background:lightgray ">
 <h5>0.0.5 - 2026-06-13</h5>
 <ul>
     <li>added notification popup, play sounds only for first occurrences in a session.</li>
